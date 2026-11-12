@@ -1,5 +1,5 @@
 // Paste your Gumroad or Lemon Squeezy product URL below before uploading demo-site/
-window.KANSO_BUY_URL = "https://gumroad.com/";
+window.KANSO_BUY_URL = "https://phairoh.gumroad.com/l/jxwerz";
 
 document.addEventListener("DOMContentLoaded", function () {
   document.body.setAttribute("data-demo", "true");
