@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="monochrome">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanso Invoice Studio — Clean Invoice, Quote &amp; Receipt Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./tokens.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-mobile-view="edit">
+  <header class="topbar">
+    <div class="topbar-group">
+      <div class="brand">
+        <span class="brand-name">Kanso</span>
+        <span class="brand-tag">Invoice Studio</span>
+      </div>
+
+      <div class="segmented" role="group" aria-label="Document type">
+        <button type="button" class="segmented-btn is-active" data-doc-type="invoice">Invoice</button>
+        <button type="button" class="segmented-btn" data-doc-type="quote">Quote</button>
+        <button type="button" class="segmented-btn" data-doc-type="receipt">Receipt</button>
+      </div>
+    </div>
+
+    <div class="topbar-group">
+      <label class="sr-only" for="currency-select" hidden>Currency</label>
+      <select id="currency-select" class="topbar-select" aria-label="Currency">
+        <option value="USD">USD ($)</option>
+        <option value="EUR">EUR (€)</option>
+        <option value="GBP">GBP (£)</option>
+        <option value="THB">THB (฿)</option>
+        <option value="SGD">SGD (S$)</option>
+        <option value="JPY">JPY (¥)</option>
+      </select>
+
+      <button type="button" id="btn-sample" class="btn btn-ghost">Sample</button>
+      <button type="button" id="btn-reset" class="btn btn-ghost">Reset</button>
+      <button type="button" id="btn-export-json" class="btn">Save JSON</button>
+      <button type="button" id="btn-import-json" class="btn">Import</button>
+      <input type="file" id="input-import-json" accept="application/json,.json" hidden />
+      <button type="button" id="btn-print" class="btn btn-primary">Export PDF</button>
+    </div>
+  </header>
+
+  <div class="mobile-tabs" role="tablist" aria-label="Mobile view">
+    <div class="segmented">
+      <button type="button" class="segmented-btn is-active" data-mobile-tab="edit">Edit Details</button>
+      <button type="button" class="segmented-btn" data-mobile-tab="preview">A4 Preview</button>
+    </div>
+  </div>
+
+  <main class="workspace">
+    <!-- Left Editor Panel -->
+    <aside class="editor-pane" aria-label="Document Editor">
+      <section class="editor-section">
+        <div class="section-header">
+          <h2 class="section-title">Document Details</h2>
+        </div>
+        <div class="field-grid">
+          <div>
+            <label class="field-label" for="doc-number">Number</label>
+            <input id="doc-number" class="field-input" type="text" data-bind="docNumber" placeholder="INV-2026-004" />
+          </div>
+          <div>
+            <label class="field-label" for="doc-status">Status</label>
+            <select id="doc-status" class="field-select" data-bind="status">
+              <option value="draft">Draft</option>
+              <option value="unpaid">Unpaid</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="issue-date">Issue Date</label>
+            <input id="issue-date" class="field-input" type="date" data-bind="issueDate" />
+          </div>
+          <div>
+            <label class="field-label" id="due-date-label" for="due-date">Due Date</label>
+            <input id="due-date" class="field-input" type="date" data-bind="dueDate" />
+          </div>
+        </div>
+      </section>
+
+      <section class="editor-section">
+        <div class="section-header">
+          <h2 class="section-title">From (Your Studio)</h2>
+        </div>
+        <div class="field-grid">
+          <div class="field-full">
+            <label class="field-label" for="logo-upload">Brand Logo (Optional)</label>
+            <div class="logo-row">
+              <img id="editor-logo-thumb" class="logo-thumb" alt="Brand logo preview" hidden />
+              <button type="button" id="btn-upload-logo" class="btn btn-sm">Upload Logo</button>
+              <button type="button" id="btn-remove-logo" class="btn btn-ghost btn-sm" hidden>Remove</button>
+              <input type="file" id="logo-upload" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden />
+            </div>
+          </div>
+          <div class="field-full">
+            <label class="field-label" for="sender-name">Business / Your Name</label>
+            <input id="sender-name" class="field-input" type="text" data-bind="senderName" placeholder="Northwind Design Studio" />
+          </div>
+          <div class="field-full">
+            <label class="field-label" for="sender-meta">Email, Address &amp; Tax ID</label>
+            <textarea id="sender-meta" class="field-textarea" data-bind="senderMeta" placeholder="billing@northwind.studio&#10;42 Market Street, Suite 300"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="editor-section">
+        <div class="section-header">
+          <h2 class="section-title">Bill To (Client)</h2>
+        </div>
+        <div class="field-grid">
+          <div class="field-full">
+            <label class="field-label" for="client-name">Client / Company Name</label>
+            <input id="client-name" class="field-input" type="text" data-bind="clientName" placeholder="Acme Commerce Ltd." />
+          </div>
+          <div class="field-full">
+            <label class="field-label" for="client-meta">Client Email &amp; Address</label>
+            <textarea id="client-meta" class="field-textarea" data-bind="clientMeta" placeholder="accounts@acme.co&#10;180 King Street West, Toronto"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="editor-section">
+        <div class="section-header">
+          <h2 class="section-title">Line Items</h2>
+          <button type="button" id="btn-add-item" class="btn btn-sm">+ Add Item</button>
+        </div>
+        <div id="items-editor-list" class="items-list"></div>
+      </section>
+
+      <section class="editor-section">
+        <div class="section-header">
+          <h2 class="section-title">Discount, Tax &amp; Payment</h2>
+        </div>
+        <div class="field-grid">
+          <div class="field-full">
+            <label class="field-label" for="discount-value">Discount</label>
+            <div class="discount-row">
+              <input id="discount-value" class="field-input is-num" type="number" min="0" step="any" data-bind="discountValue" />
+              <select id="discount-type" class="field-select" data-bind="discountType" aria-label="Discount type">
+                <option value="percent">% Pct</option>
+                <option value="fixed">Fixed</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-full">
+            <label class="field-label" for="tax-rate">Tax / VAT Rate</label>
+            <div class="input-group">
+              <input id="tax-rate" class="field-input is-num" type="number" min="0" step="any" data-bind="taxRate" />
+              <span class="input-addon">%</span>
+            </div>
+          </div>
+          <div class="field-full">
+            <label class="field-label" for="payment-info">Payment Instructions</label>
+            <textarea id="payment-info" class="field-textarea" data-bind="paymentInfo" placeholder="Bank Transfer / Wise / Stripe link"></textarea>
+          </div>
+          <div class="field-full">
+            <label class="field-label" for="doc-notes">Notes &amp; Terms</label>
+            <textarea id="doc-notes" class="field-textarea" data-bind="notes" placeholder="Thank you for your business."></textarea>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Right Live A4 Preview Pane -->
+    <section class="preview-pane" aria-label="A4 Document Preview">
+      <article class="paper-sheet" id="paper-sheet">
+        <header class="paper-header">
+          <div class="paper-brand">
+            <img id="preview-logo" class="paper-logo" alt="Company logo" hidden />
+            <h1 class="paper-sender-name" id="preview-sender-name"></h1>
+            <p class="paper-sender-meta" id="preview-sender-meta"></p>
+          </div>
+
+          <div class="paper-doc-meta">
+            <h2 class="paper-doc-type" id="preview-doc-type">INVOICE</h2>
+            <p class="paper-doc-number" id="preview-doc-number"></p>
+            <span class="status-pill" id="preview-status" data-status="unpaid">Unpaid</span>
+          </div>
+        </header>
+
+        <section class="paper-parties">
+          <div>
+            <p class="paper-block-label" id="preview-billto-label">Bill To</p>
+            <p class="paper-client-name" id="preview-client-name"></p>
+            <p class="paper-client-meta" id="preview-client-meta"></p>
+          </div>
+          <div class="paper-dates">
+            <span class="paper-date-label">Issue Date</span>
+            <span class="paper-date-val" id="preview-issue-date"></span>
+            <span class="paper-date-label" id="preview-due-label">Due Date</span>
+            <span class="paper-date-val" id="preview-due-date"></span>
+          </div>
+        </section>
+
+        <table class="paper-table" aria-label="Invoice line items">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="is-right">Qty</th>
+              <th class="is-right">Rate</th>
+              <th class="is-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="preview-items-body"></tbody>
+        </table>
+
+        <section class="paper-summary">
+          <div class="summary-box">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span class="summary-val" id="preview-subtotal"></span>
+            </div>
+            <div class="summary-row" id="preview-discount-row">
+              <span id="preview-discount-label">Discount</span>
+              <span class="summary-val" id="preview-discount"></span>
+            </div>
+            <div class="summary-row" id="preview-tax-row">
+              <span id="preview-tax-label">Tax</span>
+              <span class="summary-val" id="preview-tax"></span>
+            </div>
+            <div class="summary-total">
+              <span class="summary-total-label" id="preview-total-label">Total Due</span>
+              <span class="summary-total-val" id="preview-total"></span>
+            </div>
+          </div>
+        </section>
+
+        <footer class="paper-footer">
+          <div>
+            <p class="paper-block-label">Payment Instructions</p>
+            <p class="paper-footer-text" id="preview-payment-info"></p>
+          </div>
+          <div>
+            <p class="paper-block-label">Notes</p>
+            <p class="paper-footer-text" id="preview-notes"></p>
+          </div>
+        </footer>
+      </article>
+    </section>
+  </main>
+
+  <div class="demo-banner" aria-label="Live demo notice">
+    <span>Live Preview — Pure HTML/CSS/JS, offline-ready</span>
+    <a class="demo-cta" href="#buy" id="demo-buy-link">Get Source ($15)</a>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./calculator.js"></script>
+  <script src="./app.js"></script>
+  <script src="./demo-config.js"></script>
+</body>
+</html>

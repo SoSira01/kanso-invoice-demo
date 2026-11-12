@@ -1,0 +1,52 @@
+/* ==========================================================================
+   Kanso Invoice Studio — Design Tokens
+   Customize brand colors, typography, and spacing in under 2 minutes.
+   ========================================================================== */
+
+:root {
+  /* Surfaces */
+  --bg-app: #f5f5f7;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f9f9fb;
+  --bg-input: #ffffff;
+
+  /* Ink */
+  --ink-primary: #1d1d1f;
+  --ink-secondary: #515154;
+  --ink-muted: #86868b;
+
+  /* Borders */
+  --border-hairline: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.16);
+
+  /* Brand Accent (Default: Monochrome Studio) */
+  --accent: #111111;
+  --accent-hover: #2c2c2e;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(17, 17, 17, 0.06);
+
+  /* Status Pills */
+  --status-draft-bg: #f2f2f7;
+  --status-draft-ink: #515154;
+  --status-unpaid-bg: #fff4e5;
+  --status-unpaid-ink: #9a5b13;
+  --status-paid-bg: #eaf7ee;
+  --status-paid-ink: #1b6b38;
+
+  /* Typography */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* 8pt Spacing Scale */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+
+  /* Radii & Elevation */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-paper: 2px;       /* ขอบกระดาษคมสะอาดเหมือนสิ่งพิมพ์จริง */
+  --shadow-paper: 0 1px 3px rgba(0, 0, 0, 0.06), 0 14px 36px rgba(0, 0, 0, 0.04);
+}
